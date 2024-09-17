@@ -1,238 +1,228 @@
 <!DOCTYPE html>
-<html>
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>API Documentation</title>
-</head>
-
-
-<!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>API Documentation</title>
+    <title>API Documentation - myFlix</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             line-height: 1.6;
-            margin: 20px;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        h1 {
+            margin-top: 0;
+        }
+
+        section {
+            background-color: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
             color: #333;
         }
 
-        h1,
-        h2,
-        h3 {
-            color: #0561c4;
-        }
-
         code {
-            background-color: #f8f9fa;
+            background-color: #f4f4f4;
             padding: 2px 4px;
             border-radius: 4px;
         }
 
-        .endpoint {
-            margin-bottom: 20px;
-        }
-
-        .example {
-            background-color: #e0e1e2;
+        pre {
+            background-color: #333;
+            color: #fff;
             padding: 10px;
             border-radius: 4px;
-            margin-top: 10px;
         }
 
-        pre {
-            margin: 0;
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        ul li {
+            background: #f4f4f4;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
         }
     </style>
 </head>
 
 <body>
-    <h1>API Documentation</h1>
 
-    <div class="endpoint">
-        <h2>1. Get Top 10 Movies</h2>
-        <p><strong>High-Level Description:</strong> Returns a list of the top 10 movies in JSON format.</p>
-        <p><strong>Endpoint URL:</strong> <code>/movies</code></p>
-        <p><strong>Method Type:</strong> GET</p>
-        <p><strong>Query Parameters:</strong> None</p>
-        <h3>Response Format:</h3>
-        <p>JSON array containing movie objects.</p>
-        <div class="example">
-            <pre>
-[
+    <header>
+        <h1>myFlix API Documentation</h1>
+    </header>
+
+    <section>
+        <h2>Overview</h2>
+        <p>This API allows users to interact with the <strong>myFlix</strong> movie database. Users can view movies,
+            genres, and directors, register as users, and manage their favorite movies list. Below are the routes and
+            methods provided by the API.</p>
+    </section>
+
+    <section>
+        <h2>GET /movies</h2>
+        <p>Returns a list of all movies in the database.</p>
+        <pre>http://localhost:8080/movies</pre>
+        <p><strong>Response:</strong></p>
+        <pre>[
   {
-    "title": "The Godfather",
-    "description": "The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.",
-    "imageURL": "https://upload.wikimedia.org/wikipedia/en/1/1c/Godfather_ver1.jpg",
-    "director": {
-      "name": "Francis Ford Coppola",
-      "description": "Francis Ford Coppola is an American film director, producer, and screenwriter."
-    },
-    "genre": {
-      "name": "Crime",
-      "description": "Crime movies are movies that focus on criminal activities."
-    }
+    "title": "Inception",
+    "description": "A mind-bending thriller",
+    "genre": { "name": "Sci-Fi", "description": "Science Fiction movies" },
+    "director": { "name": "Christopher Nolan", "bio": "Famous director", "birth_year": "1970", "death_year": null },
+    "imageUrl": "/path/to/image.jpg",
+    "featured": true
   },
-  ...
-]</pre>
-        </div>
-    </div>
-
-    <div class="endpoint">
-        <h2>2. Get Movie by Title</h2>
-        <p><strong>High-Level Description:</strong> Retrieves a movie object by its title.</p>
-        <p><strong>Endpoint URL:</strong> <code>/movies/:title</code></p>
-        <p><strong>Method Type:</strong> GET</p>
-        <p><strong>Query Parameters:</strong>
-        <ul>
-            <li><code>title</code> (required): The title of the movie.</li>
-        </ul>
-        </p>
-        <h3>Response Format:</h3>
-        <p>JSON object containing the movie details.</p>
-        <div class="example">
-            <pre>
-{
-  "title": "The Godfather",
-  "description": "The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.",
-  "imageURL": "https://upload.wikimedia.org/wikipedia/en/1/1c/Godfather_ver1.jpg",
-  "director": {
-    "name": "Francis Ford Coppola",
-    "description": "Francis Ford Coppola is an American film director, producer, and screenwriter."
-  },
-  "genre": {
-    "name": "Crime",
-    "description": "Crime movies are movies that focus on criminal activities."
+  {
+    "title": "The Dark Knight",
+    "description": "A thrilling superhero movie",
+    ...
   }
+]</pre>
+        <p>This endpoint provides detailed data about each movie including the title, description, genre, director,
+            image URL, and whether it’s featured.</p>
+    </section>
+
+    <section>
+        <h2>GET /movies/:title</h2>
+        <p>Returns data about a single movie by title, including:</p>
+        <ul>
+            <li>Description</li>
+            <li>Genre</li>
+            <li>Director</li>
+            <li>Image URL</li>
+            <li>Featured status</li>
+        </ul>
+        <pre> http://localhost:8080/movies/Inception</pre>
+        <p><strong>Response:</strong></p>
+        <pre>{
+  "title": "Inception",
+  "description": "A mind-bending thriller",
+  "genre": { "name": "Sci-Fi", "description": "Science Fiction movies" },
+  "director": { "name": "Christopher Nolan", "bio": "Famous director", "birth_year": "1970", "death_year": null },
+  "imageUrl": "/path/to/image.jpg",
+  "featured": true
 }</pre>
-        </div>
-    </div>
+    </section>
 
-    <div class="endpoint">
-        <h2>3. Get Genre Description</h2>
-        <p><strong>High-Level Description:</strong> Returns the description of a specified genre.</p>
-        <p><strong>Endpoint URL:</strong> <code>/genres/:name</code></p>
-        <p><strong>Method Type:</strong> GET</p>
-        <p><strong>Query Parameters:</strong>
+    <section>
+        <h2>GET /genres/:name</h2>
+        <p>Returns data about a specific genre by name.</p>
+        <pre> http://localhost:8080/genres/Action</pre>
+        <p><strong>Response:</strong></p>
+        <pre>{
+  "name": "Action",
+  "description": "Action-packed movies"
+}</pre>
+    </section>
+
+    <section>
+        <h2>GET /directors/:name</h2>
+        <p>Returns data about a director by name, including:</p>
         <ul>
-            <li><code>name</code> (required): The name of the genre.</li>
+            <li>Bio</li>
+            <li>Birth year</li>
+            <li>Death year (if applicable)</li>
         </ul>
-        </p>
-        <h3>Response Format:</h3>
-        <p>Plain text description of the genre.</p>
-        <div class="example">
-            <pre>"Crime movies are movies that focus on criminal activities."</pre>
-        </div>
-    </div>
+        <pre> http://localhost:8080/directors/Nolan</pre>
+        <p><strong>Response:</strong></p>
+        <pre>{
+  "name": "Christopher Nolan",
+  "bio": "Famous director known for complex, mind-bending films",
+  "birth_year": "1970",
+  "death_year": null
+}</pre>
+    </section>
 
-    <div class="endpoint">
-        <h2>4. Get Director Description</h2>
-        <p><strong>High-Level Description:</strong> Returns the description of a specified director.</p>
-        <p><strong>Endpoint URL:</strong> <code>/directors/:name</code></p>
-        <p><strong>Method Type:</strong> GET</p>
-        <p><strong>Query Parameters:</strong>
+    <section>
+        <h2>POST /users</h2>
+        <p>Allows new users to register by providing:</p>
         <ul>
-            <li><code>name</code> (required): The name of the director.</li>
+            <li>Username</li>
+            <li>Password</li>
+            <li>Email</li>
+            <li>Date of Birth</li>
         </ul>
-        </p>
-        <h3>Response Format:</h3>
-        <p>Plain text description of the director.</p>
-        <div class="example">
-            <pre>"Francis Ford Coppola is an American film director, producer, and screenwriter."</pre>
-        </div>
-    </div>
+        <pre> POST http://localhost:8080/users -d '{"username":"johnDoe","Password":"1234","Email":"john@example.com","Birthday":"1990-01-01"}'</pre>
+        <p><strong>Response:</strong></p>
+        <pre>{
+  "username": "johnDoe",
+  "Password": "1234",
+  "Email": "john@example.com",
+  "Birthday": "1990-01-01"
+}</pre>
+    </section>
 
-    <div class="endpoint">
-        <h2>5. Create New User</h2>
-        <p><strong>High-Level Description:</strong> Creates a new user.</p>
-        <p><strong>Endpoint URL:</strong> <code>/users</code></p>
-        <p><strong>Method Type:</strong> POST</p>
-        <p><strong>Query Parameters:</strong> None</p>
-        <p><strong>Body Data Format:</strong> Not specified in the code (could include user data like username, email,
-            etc.).</p>
-        <h3>Response Format:</h3>
-        <p>Plain text message indicating success.</p>
-        <div class="example">
-            <pre>"User created successfully."</pre>
-        </div>
-    </div>
-
-    <div class="endpoint">
-        <h2>6. Update User</h2>
-        <p><strong>High-Level Description:</strong> Updates an existing user’s information.</p>
-        <p><strong>Endpoint URL:</strong> <code>/users/:username</code></p>
-        <p><strong>Method Type:</strong> PUT</p>
-        <p><strong>Query Parameters:</strong>
+    <section>
+        <h2>PUT /users/:username</h2>
+        <p>Allows users to update their user information including:</p>
         <ul>
-            <li><code>username</code> (required): The username of the user to update.</li>
+            <li>username</li>
+            <li>Password</li>
+            <li>Email</li>
+            <li>Date of Birth</li>
         </ul>
-        </p>
-        <p><strong>Body Data Format:</strong> Not specified in the code (could include updated user data).</p>
-        <h3>Response Format:</h3>
-        <p>Plain text message indicating success.</p>
-        <div class="example">
-            <pre>"User updated successfully."</pre>
-        </div>
-    </div>
+        <pre>PUT http://localhost:8080/users/johnDoe -d '{"Email":"johnnew@example.com"}'</pre>
+        <p><strong>Response:</strong></p>
+        <pre>{
+  "username": "johnDoe",
+  "Email": "johnnew@example.com",
+  "Password": "1234",
+  "Birthday": "1990-01-01"
+}</pre>
+    </section>
 
-    <div class="endpoint">
-        <h2>7. Add Movie to User's Favorite List</h2>
-        <p><strong>High-Level Description:</strong> Adds a movie to a user's list of favorites.</p>
-        <p><strong>Endpoint URL:</strong> <code>/users/:username/movies/:title</code></p>
-        <p><strong>Method Type:</strong> PUT</p>
-        <p><strong>Query Parameters:</strong>
-        <ul>
-            <li><code>username</code> (required): The username of the user.</li>
-            <li><code>title</code> (required): The title of the movie to add.</li>
-        </ul>
-        </p>
-        <h3>Response Format:</h3>
-        <p>Plain text message indicating success.</p>
-        <div class="example">
-            <pre>"Movie The Godfather added to johndoe's favorite list."</pre>
-        </div>
-    </div>
+    <section>
+        <h2>PUT /users/:username/movies/:MovieID</h2>
+        <p>Allows users to add a movie to their list of favorite movies by movie ID.</p>
+        <pre>PUT http://localhost:8080/users/johnDoe/movies/5f8d0d55b54764421b7156c7</pre>
+        <p><strong>Response:</strong></p>
+        <pre>{
+  "username": "johnDoe",
+  "FavoriteMovies": ["5f8d0d55b54764421b7156c7"]
+}</pre>
+    </section>
 
-    <div class="endpoint">
-        <h2>8. Remove Movie from User's Favorite List</h2>
-        <p><strong>High-Level Description:</strong> Removes a movie from a user's list of favorites.</p>
-        <p><strong>Endpoint URL:</strong> <code>/users/:username/movies/:title</code></p>
-        <p><strong>Method Type:</strong> DELETE</p>
-        <p><strong>Query Parameters:</strong>
-        <ul>
-            <li><code>username</code> (required): The username of the user.</li>
-            <li><code>title</code> (required): The title of the movie to remove.</li>
-        </ul>
-        </p>
-        <h3>Response Format:</h3>
-        <p>Plain text message indicating success.</p>
-        <div class="example">
-            <pre>"Movie The Godfather removed from johndoe's favorite list."</pre>
-        </div>
-    </div>
+    <section>
+        <h2>DELETE /users/:username/movies/:MovieID</h2>
+        <p>Allows users to remove a movie from their list of favorite movies by movie ID.</p>
+        <pre>DELETE http://localhost:8080/users/johnDoe/movies/5f8d0d55b54764421b7156c7</pre>
+        <p><strong>Response:</strong></p>
+        <pre>{
+  "username": "johnDoe",
+  "FavoriteMovies": []
+}</pre>
+    </section>
 
-    <div class="endpoint">
-        <h2>9. Deregister User</h2>
-        <p><strong>High-Level Description:</strong> Deregisters (deletes) a user from the system.</p>
-        <p><strong>Endpoint URL:</strong> <code>/users/:username</code></p>
-        <p><strong>Method Type:</strong> DELETE</p>
-        <p><strong>Query Parameters:</strong>
-        <ul>
-            <li><code>username</code> (required): The username of the user to deregister.</li>
-        </ul>
-        </p>
-        <h3>Response Format:</h3>
-        <p>Plain text message indicating success.</p>
-        <div class="example">
-            <pre>"User johndoe deregistered successfully."</pre>
-        </div>
-    </div>
+    <section>
+        <h2>DELETE /users/:username</h2>
+        <p>Allows existing users to deregister by username.</p>
+        <pre>DELETE http://localhost:8080/users/johnDoe</pre>
+        <p><strong>Response:</strong></p>
+        <pre>johnDoe was deleted.</pre>
+    </section>
+
+    <footer>
+        <p>API documentation for <strong>myFlix2</strong> - Express.js application.</p>
+    </footer>
 
 </body>
 
