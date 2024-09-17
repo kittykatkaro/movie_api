@@ -161,10 +161,10 @@
             <li>Email</li>
             <li>Date of Birth</li>
         </ul>
-        <pre> POST http://localhost:8080/users -d '{"Username":"johnDoe","Password":"1234","Email":"john@example.com","Birthday":"1990-01-01"}'</pre>
+        <pre> POST http://localhost:8080/users -d '{"username":"johnDoe","Password":"1234","Email":"john@example.com","Birthday":"1990-01-01"}'</pre>
         <p><strong>Response:</strong></p>
         <pre>{
-  "Username": "johnDoe",
+  "username": "johnDoe",
   "Password": "1234",
   "Email": "john@example.com",
   "Birthday": "1990-01-01"
@@ -172,10 +172,10 @@
     </section>
 
     <section>
-        <h2>PUT /users/:Username</h2>
+        <h2>PUT /users/:username</h2>
         <p>Allows users to update their user information including:</p>
         <ul>
-            <li>Username</li>
+            <li>username</li>
             <li>Password</li>
             <li>Email</li>
             <li>Date of Birth</li>
@@ -183,7 +183,7 @@
         <pre>PUT http://localhost:8080/users/johnDoe -d '{"Email":"johnnew@example.com"}'</pre>
         <p><strong>Response:</strong></p>
         <pre>{
-  "Username": "johnDoe",
+  "username": "johnDoe",
   "Email": "johnnew@example.com",
   "Password": "1234",
   "Birthday": "1990-01-01"
@@ -196,7 +196,7 @@
         <pre>PUT http://localhost:8080/users/johnDoe/movies/5f8d0d55b54764421b7156c7</pre>
         <p><strong>Response:</strong></p>
         <pre>{
-  "Username": "johnDoe",
+  "username": "johnDoe",
   "FavoriteMovies": ["5f8d0d55b54764421b7156c7"]
 }</pre>
     </section>
@@ -207,13 +207,13 @@
         <pre>DELETE http://localhost:8080/users/johnDoe/movies/5f8d0d55b54764421b7156c7</pre>
         <p><strong>Response:</strong></p>
         <pre>{
-  "Username": "johnDoe",
+  "username": "johnDoe",
   "FavoriteMovies": []
 }</pre>
     </section>
 
     <section>
-        <h2>DELETE /users/:Username</h2>
+        <h2>DELETE /users/:username</h2>
         <p>Allows existing users to deregister by username.</p>
         <pre>DELETE http://localhost:8080/users/johnDoe</pre>
         <p><strong>Response:</strong></p>
