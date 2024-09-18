@@ -4,10 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>API Documentation</title>
+    <title>API Documentation - myFlix</title>
     <style>
         body {
             font-family: Arial, sans-serif;
+<<<<<<< HEAD
         }
 
         .endpoint {
@@ -22,13 +23,67 @@
             background-color: #f4f4f4;
             padding: 10px;
             border-left: 3px solid #ccc;
+=======
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        h1 {
+            margin-top: 0;
+        }
+
+        section {
+            background-color: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+
+        pre {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            border-radius: 4px;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        ul li {
+            background: #f4f4f4;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+>>>>>>> cd0a91d388a7cb3d2fb3ced990cd55e714f09781
         }
     </style>
 </head>
 
 <body>
-    <h1>API Documentation</h1>
 
+<<<<<<< HEAD
     <div class="endpoint">
         <h2>1. Return a list of ALL movies</h2>
         <p class="method">Method: <span>GET</span></p>
@@ -202,6 +257,166 @@
         }
         </pre>
     </div>
+=======
+    <header>
+        <h1>myFlix API Documentation</h1>
+    </header>
+
+    <section>
+        <h2>Overview</h2>
+        <p>This API allows users to interact with the <strong>myFlix</strong> movie database. Users can view movies,
+            genres, and directors, register as users, and manage their favorite movies list. Below are the routes and
+            methods provided by the API.</p>
+    </section>
+
+    <section>
+        <h2>GET /movies</h2>
+        <p>Returns a list of all movies in the database.</p>
+        <pre>http://localhost:8080/movies</pre>
+        <p><strong>Response:</strong></p>
+        <pre>[
+  {
+    "title": "Inception",
+    "description": "A mind-bending thriller",
+    "genre": { "name": "Sci-Fi", "description": "Science Fiction movies" },
+    "director": { "name": "Christopher Nolan", "bio": "Famous director", "birth_year": "1970", "death_year": null },
+    "imageUrl": "/path/to/image.jpg",
+    "featured": true
+  },
+  {
+    "title": "The Dark Knight",
+    "description": "A thrilling superhero movie",
+    ...
+  }
+]</pre>
+        <p>This endpoint provides detailed data about each movie including the title, description, genre, director,
+            image URL, and whether it’s featured.</p>
+    </section>
+
+    <section>
+        <h2>GET /movies/:title</h2>
+        <p>Returns data about a single movie by title, including:</p>
+        <ul>
+            <li>Description</li>
+            <li>Genre</li>
+            <li>Director</li>
+            <li>Image URL</li>
+            <li>Featured status</li>
+        </ul>
+        <pre> http://localhost:8080/movies/Inception</pre>
+        <p><strong>Response:</strong></p>
+        <pre>{
+  "title": "Inception",
+  "description": "A mind-bending thriller",
+  "genre": { "name": "Sci-Fi", "description": "Science Fiction movies" },
+  "director": { "name": "Christopher Nolan", "bio": "Famous director", "birth_year": "1970", "death_year": null },
+  "imageUrl": "/path/to/image.jpg",
+  "featured": true
+}</pre>
+    </section>
+
+    <section>
+        <h2>GET /genres/:name</h2>
+        <p>Returns data about a specific genre by name.</p>
+        <pre> http://localhost:8080/genres/Action</pre>
+        <p><strong>Response:</strong></p>
+        <pre>{
+  "name": "Action",
+  "description": "Action-packed movies"
+}</pre>
+    </section>
+
+    <section>
+        <h2>GET /directors/:name</h2>
+        <p>Returns data about a director by name, including:</p>
+        <ul>
+            <li>Bio</li>
+            <li>Birth year</li>
+            <li>Death year (if applicable)</li>
+        </ul>
+        <pre> http://localhost:8080/directors/Nolan</pre>
+        <p><strong>Response:</strong></p>
+        <pre>{
+  "name": "Christopher Nolan",
+  "bio": "Famous director known for complex, mind-bending films",
+  "birth_year": "1970",
+  "death_year": null
+}</pre>
+    </section>
+
+    <section>
+        <h2>POST /users</h2>
+        <p>Allows new users to register by providing:</p>
+        <ul>
+            <li>Username</li>
+            <li>Password</li>
+            <li>Email</li>
+            <li>Date of Birth</li>
+        </ul>
+        <pre> POST http://localhost:8080/users -d '{"username":"johnDoe","Password":"1234","Email":"john@example.com","Birthday":"1990-01-01"}'</pre>
+        <p><strong>Response:</strong></p>
+        <pre>{
+  "username": "johnDoe",
+  "Password": "1234",
+  "Email": "john@example.com",
+  "Birthday": "1990-01-01"
+}</pre>
+    </section>
+
+    <section>
+        <h2>PUT /users/:username</h2>
+        <p>Allows users to update their user information including:</p>
+        <ul>
+            <li>username</li>
+            <li>Password</li>
+            <li>Email</li>
+            <li>Date of Birth</li>
+        </ul>
+        <pre>PUT http://localhost:8080/users/johnDoe -d '{"Email":"johnnew@example.com"}'</pre>
+        <p><strong>Response:</strong></p>
+        <pre>{
+  "username": "johnDoe",
+  "Email": "johnnew@example.com",
+  "Password": "1234",
+  "Birthday": "1990-01-01"
+}</pre>
+    </section>
+
+    <section>
+        <h2>PUT /users/:username/movies/:MovieID</h2>
+        <p>Allows users to add a movie to their list of favorite movies by movie ID.</p>
+        <pre>PUT http://localhost:8080/users/johnDoe/movies/5f8d0d55b54764421b7156c7</pre>
+        <p><strong>Response:</strong></p>
+        <pre>{
+  "username": "johnDoe",
+  "FavoriteMovies": ["5f8d0d55b54764421b7156c7"]
+}</pre>
+    </section>
+
+    <section>
+        <h2>DELETE /users/:username/movies/:MovieID</h2>
+        <p>Allows users to remove a movie from their list of favorite movies by movie ID.</p>
+        <pre>DELETE http://localhost:8080/users/johnDoe/movies/5f8d0d55b54764421b7156c7</pre>
+        <p><strong>Response:</strong></p>
+        <pre>{
+  "username": "johnDoe",
+  "FavoriteMovies": []
+}</pre>
+    </section>
+
+    <section>
+        <h2>DELETE /users/:username</h2>
+        <p>Allows existing users to deregister by username.</p>
+        <pre>DELETE http://localhost:8080/users/johnDoe</pre>
+        <p><strong>Response:</strong></p>
+        <pre>johnDoe was deleted.</pre>
+    </section>
+
+    <footer>
+        <p>API documentation for <strong>myFlix2</strong> - Express.js application.</p>
+    </footer>
+
+>>>>>>> cd0a91d388a7cb3d2fb3ced990cd55e714f09781
 </body>
 
 </html>
