@@ -207,7 +207,7 @@ app.delete('/users/:username', async (req, res) => {
 			if (!user) {
 				res.status(400).send(req.params.username + ' was not found');
 			} else {
-				res.status(200).send(req.params.uername + ' was deleted.');
+				res.status(200).send(req.params.username + ' was deleted.');
 			}
 		})
 		.catch((err) => {
