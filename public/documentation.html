@@ -1,14 +1,4 @@
 <!DOCTYPE html>
-<html>
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>API Documentation</title>
-</head>
-
-
-<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -18,36 +8,20 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 20px;
-            color: #333;
-        }
-
-        h1,
-        h2,
-        h3 {
-            color: #0561c4;
-        }
-
-        code {
-            background-color: #f8f9fa;
-            padding: 2px 4px;
-            border-radius: 4px;
         }
 
         .endpoint {
             margin-bottom: 20px;
         }
 
-        .example {
-            background-color: #e0e1e2;
-            padding: 10px;
-            border-radius: 4px;
-            margin-top: 10px;
+        .method {
+            font-weight: bold;
         }
 
         pre {
-            margin: 0;
+            background-color: #f4f4f4;
+            padding: 10px;
+            border-left: 3px solid #ccc;
         }
     </style>
 </head>
@@ -56,184 +30,178 @@
     <h1>API Documentation</h1>
 
     <div class="endpoint">
-        <h2>1. Get Top 10 Movies</h2>
-        <p><strong>High-Level Description:</strong> Returns a list of the top 10 movies in JSON format.</p>
-        <p><strong>Endpoint URL:</strong> <code>/movies</code></p>
-        <p><strong>Method Type:</strong> GET</p>
-        <p><strong>Query Parameters:</strong> None</p>
-        <h3>Response Format:</h3>
-        <p>JSON array containing movie objects.</p>
-        <div class="example">
-            <pre>
-[
-  {
-    "title": "The Godfather",
-    "description": "The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.",
-    "imageURL": "https://upload.wikimedia.org/wikipedia/en/1/1c/Godfather_ver1.jpg",
-    "director": {
-      "name": "Francis Ford Coppola",
-      "description": "Francis Ford Coppola is an American film director, producer, and screenwriter."
-    },
-    "genre": {
-      "name": "Crime",
-      "description": "Crime movies are movies that focus on criminal activities."
-    }
-  },
-  ...
-]</pre>
-        </div>
+        <h2>1. Return a list of ALL movies</h2>
+        <p class="method">Method: <span>GET</span></p>
+        <p>URL: <code>/movies</code></p>
+        <p>Description: This endpoint returns a list of all movies in JSON format.</p>
+        <p>Response:</p>
+        <pre>
+        [
+            {
+                "title": "Movie Title",
+                "description": "Movie description",
+                "genre": { "name": "Genre Name", "description": "Genre description" },
+                "director": { "name": "Director Name", "bio": "Director bio", "birth_year": 1970, "death_year": 2020 },
+                "imageURL": "http://example.com/image.jpg",
+                "featured": true
+            },
+            ...
+        ]
+        </pre>
     </div>
 
     <div class="endpoint">
-        <h2>2. Get Movie by Title</h2>
-        <p><strong>High-Level Description:</strong> Retrieves a movie object by its title.</p>
-        <p><strong>Endpoint URL:</strong> <code>/movies/:title</code></p>
-        <p><strong>Method Type:</strong> GET</p>
-        <p><strong>Query Parameters:</strong>
-        <ul>
-            <li><code>title</code> (required): The title of the movie.</li>
-        </ul>
-        </p>
-        <h3>Response Format:</h3>
-        <p>JSON object containing the movie details.</p>
-        <div class="example">
-            <pre>
-{
-  "title": "The Godfather",
-  "description": "The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.",
-  "imageURL": "https://upload.wikimedia.org/wikipedia/en/1/1c/Godfather_ver1.jpg",
-  "director": {
-    "name": "Francis Ford Coppola",
-    "description": "Francis Ford Coppola is an American film director, producer, and screenwriter."
-  },
-  "genre": {
-    "name": "Crime",
-    "description": "Crime movies are movies that focus on criminal activities."
-  }
-}</pre>
-        </div>
+        <h2>2. Return data about a single movie by title</h2>
+        <p class="method">Method: <span>GET</span></p>
+        <p>URL: <code>/movies/:title</code></p>
+        <p>Description: This endpoint returns detailed information about a specific movie based on its title.</p>
+        <p>Request Params:</p>
+        <pre>{ "title": "Movie Title" }</pre>
+        <p>Response:</p>
+        <pre>
+        {
+            "title": "Movie Title",
+            "description": "Movie description",
+            "genre": { "name": "Genre Name", "description": "Genre description" },
+            "director": { "name": "Director Name", "bio": "Director bio", "birth_year": 1970, "death_year": 2020 },
+            "imageURL": "http://example.com/image.jpg",
+            "featured": true
+        }
+        </pre>
     </div>
 
     <div class="endpoint">
-        <h2>3. Get Genre Description</h2>
-        <p><strong>High-Level Description:</strong> Returns the description of a specified genre.</p>
-        <p><strong>Endpoint URL:</strong> <code>/genres/:name</code></p>
-        <p><strong>Method Type:</strong> GET</p>
-        <p><strong>Query Parameters:</strong>
-        <ul>
-            <li><code>name</code> (required): The name of the genre.</li>
-        </ul>
-        </p>
-        <h3>Response Format:</h3>
-        <p>Plain text description of the genre.</p>
-        <div class="example">
-            <pre>"Crime movies are movies that focus on criminal activities."</pre>
-        </div>
+        <h2>3. Return data about a genre by name/title</h2>
+        <p class="method">Method: <span>GET</span></p>
+        <p>URL: <code>/genres/:name</code></p>
+        <p>Description: This endpoint returns the description of a genre by its name.</p>
+        <p>Request Params:</p>
+        <pre>{ "name": "Genre Name" }</pre>
+        <p>Response:</p>
+        <pre>
+        {
+            "name": "Thriller",
+            "description": "Genre description"
+        }
+        </pre>
     </div>
 
     <div class="endpoint">
-        <h2>4. Get Director Description</h2>
-        <p><strong>High-Level Description:</strong> Returns the description of a specified director.</p>
-        <p><strong>Endpoint URL:</strong> <code>/directors/:name</code></p>
-        <p><strong>Method Type:</strong> GET</p>
-        <p><strong>Query Parameters:</strong>
-        <ul>
-            <li><code>name</code> (required): The name of the director.</li>
-        </ul>
-        </p>
-        <h3>Response Format:</h3>
-        <p>Plain text description of the director.</p>
-        <div class="example">
-            <pre>"Francis Ford Coppola is an American film director, producer, and screenwriter."</pre>
-        </div>
+        <h2>4. Return data about a director by name</h2>
+        <p class="method">Method: <span>GET</span></p>
+        <p>URL: <code>/directors/:name</code></p>
+        <p>Description: This endpoint returns the bio, birth year, and death year of a director by their name.</p>
+        <p>Request Params:</p>
+        <pre>{ "name": "Director Name" }</pre>
+        <p>Response:</p>
+        <pre>
+        {
+            "name": "Director Name",
+            "bio": "Director bio",
+            "birth_year": 1970,
+            "death_year": 2020
+        }
+        </pre>
     </div>
 
     <div class="endpoint">
-        <h2>5. Create New User</h2>
-        <p><strong>High-Level Description:</strong> Creates a new user.</p>
-        <p><strong>Endpoint URL:</strong> <code>/users</code></p>
-        <p><strong>Method Type:</strong> POST</p>
-        <p><strong>Query Parameters:</strong> None</p>
-        <p><strong>Body Data Format:</strong> Not specified in the code (could include user data like username, email,
-            etc.).</p>
-        <h3>Response Format:</h3>
-        <p>Plain text message indicating success.</p>
-        <div class="example">
-            <pre>"User created successfully."</pre>
-        </div>
+        <h2>5. Allow new users to register</h2>
+        <p class="method">Method: <span>POST</span></p>
+        <p>URL: <code>/users</code></p>
+        <p>Description: This endpoint allows a new user to register by providing their username, password, email, and
+            date of birth.</p>
+        <p>Request Body:</p>
+        <pre>
+        {
+            "username": "newUser",
+            "password": "password123",
+            "email": "user@example.com",
+            "birthday": "YYYY-MM-DD"
+        }
+        </pre>
+        <p>Response:</p>
+        <pre>
+        {
+            "username": "newUser",
+            "password": "hashed_password",
+            "email": "user@example.com",
+            "birthday": "YYYY-MM-DD"
+        }
+        </pre>
     </div>
 
     <div class="endpoint">
-        <h2>6. Update User</h2>
-        <p><strong>High-Level Description:</strong> Updates an existing user’s information.</p>
-        <p><strong>Endpoint URL:</strong> <code>/users/:username</code></p>
-        <p><strong>Method Type:</strong> PUT</p>
-        <p><strong>Query Parameters:</strong>
-        <ul>
-            <li><code>username</code> (required): The username of the user to update.</li>
-        </ul>
-        </p>
-        <p><strong>Body Data Format:</strong> Not specified in the code (could include updated user data).</p>
-        <h3>Response Format:</h3>
-        <p>Plain text message indicating success.</p>
-        <div class="example">
-            <pre>"User updated successfully."</pre>
-        </div>
+        <h2>6. Allow users to update their user info</h2>
+        <p class="method">Method: <span>PUT</span></p>
+        <p>URL: <code>/users/:username</code></p>
+        <p>Description: This endpoint allows users to update their information such as username, password, email, and
+            birthday.</p>
+        <p>Request Body:</p>
+        <pre>
+        {
+            "username": "updatedUser",
+            "password": "newPassword",
+            "email": "newemail@example.com",
+            "birthday": "YYYY-MM-DD"
+        }
+        </pre>
+        <p>Response:</p>
+        <pre>
+        {
+            "username": "updatedUser",
+            "password": "hashed_new_password",
+            "email": "newemail@example.com",
+            "birthday": "YYYY-MM-DD"
+        }
+        </pre>
     </div>
 
     <div class="endpoint">
-        <h2>7. Add Movie to User's Favorite List</h2>
-        <p><strong>High-Level Description:</strong> Adds a movie to a user's list of favorites.</p>
-        <p><strong>Endpoint URL:</strong> <code>/users/:username/movies/:title</code></p>
-        <p><strong>Method Type:</strong> PUT</p>
-        <p><strong>Query Parameters:</strong>
-        <ul>
-            <li><code>username</code> (required): The username of the user.</li>
-            <li><code>title</code> (required): The title of the movie to add.</li>
-        </ul>
-        </p>
-        <h3>Response Format:</h3>
-        <p>Plain text message indicating success.</p>
-        <div class="example">
-            <pre>"Movie The Godfather added to johndoe's favorite list."</pre>
-        </div>
+        <h2>7. Allow users to add a movie to their list of favorites</h2>
+        <p class="method">Method: <span>PUT</span></p>
+        <p>URL: <code>/users/:username/movies/:MovieID</code></p>
+        <p>Description: This endpoint allows users to add a movie to their favorites list.</p>
+        <p>Request Params:</p>
+        <pre>{ "username": "user123", "MovieID": "605c72d1f1c3c8bf4b5f678d" }</pre>
+        <p>Response:</p>
+        <pre>
+        {
+            "username": "user123",
+            "favorites": ["605c72d1f1c3c8bf4b5f678d"]
+        }
+        </pre>
     </div>
 
     <div class="endpoint">
-        <h2>8. Remove Movie from User's Favorite List</h2>
-        <p><strong>High-Level Description:</strong> Removes a movie from a user's list of favorites.</p>
-        <p><strong>Endpoint URL:</strong> <code>/users/:username/movies/:title</code></p>
-        <p><strong>Method Type:</strong> DELETE</p>
-        <p><strong>Query Parameters:</strong>
-        <ul>
-            <li><code>username</code> (required): The username of the user.</li>
-            <li><code>title</code> (required): The title of the movie to remove.</li>
-        </ul>
-        </p>
-        <h3>Response Format:</h3>
-        <p>Plain text message indicating success.</p>
-        <div class="example">
-            <pre>"Movie The Godfather removed from johndoe's favorite list."</pre>
-        </div>
+        <h2>8. Allow users to remove a movie from their list of favorites</h2>
+        <p class="method">Method: <span>DELETE</span></p>
+        <p>URL: <code>/users/:username/movies/:MovieID</code></p>
+        <p>Description: This endpoint allows users to remove a movie from their favorites list.</p>
+        <p>Request Params:</p>
+        <pre>{ "username": "user123", "MovieID": "605c72d1f1c3c8bf4b5f678d" }</pre>
+        <p>Response:</p>
+        <pre>
+        {
+            "username": "user123",
+            "favorites": []
+        }
+        </pre>
     </div>
 
     <div class="endpoint">
-        <h2>9. Deregister User</h2>
-        <p><strong>High-Level Description:</strong> Deregisters (deletes) a user from the system.</p>
-        <p><strong>Endpoint URL:</strong> <code>/users/:username</code></p>
-        <p><strong>Method Type:</strong> DELETE</p>
-        <p><strong>Query Parameters:</strong>
-        <ul>
-            <li><code>username</code> (required): The username of the user to deregister.</li>
-        </ul>
-        </p>
-        <h3>Response Format:</h3>
-        <p>Plain text message indicating success.</p>
-        <div class="example">
-            <pre>"User johndoe deregistered successfully."</pre>
-        </div>
+        <h2>9. Allow existing users to deregister</h2>
+        <p class="method">Method: <span>DELETE</span></p>
+        <p>URL: <code>/users/:username</code></p>
+        <p>Description: This endpoint allows existing users to deregister and delete their account.</p>
+        <p>Request Params:</p>
+        <pre>{ "username": "user123" }</pre>
+        <p>Response:</p>
+        <pre>
+        {
+            "message": "user123 was deleted."
+        }
+        </pre>
     </div>
-
 </body>
 
 </html>
