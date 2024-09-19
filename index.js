@@ -12,10 +12,14 @@ const Users = Models.User;
 const { check, validationResult } = require('express-validator');
 
 // Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/myFlix2', {
+mongoose.connect(process.env.CONNECTION_URI, {
 	useNewUrlParser: true,
 	useUnifiedTopology: true,
 });
+// mongoose.connect('mongodb://localhost:27017/myFlix2', {
+// 	useNewUrlParser: true,
+// 	useUnifiedTopology: true,
+// });
 
 const app = express();
 app.use(bodyParser.json());
