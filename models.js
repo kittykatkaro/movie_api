@@ -1,11 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
-const validPassword = await bcrypt.compare(req.body.password, user.password);
-if (!validPassword) {
-	return res.status(400).json({ error: 'Invalid password' });
-}
-
 let movieSchema = mongoose.Schema({
 	title: { type: String, required: true },
 	description: { type: String, required: true },
