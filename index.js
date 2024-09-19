@@ -75,7 +75,7 @@ app.get(
 	}
 );
 
-// GET route for "/users" that returns users in JSON format
+// GET route for "/users" that returns users in JSON format, FOR TESTING PURPOSES
 app.get('/users', async (req, res) => {
 	await Users.find()
 		.then((users) => {
