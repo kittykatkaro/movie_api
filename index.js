@@ -103,6 +103,22 @@ app.get(
 	}
 );
 
+// GET movie by ID
+app.get(
+	'/movies/:id',
+	passport.authenticate('jwt', { session: false }),
+	async (req, res) => {
+		await Movies.findById(req.params.id)
+			.then((movie) => {
+				res.json(movie);
+			})
+			.catch((error) => {
+				console.error(error);
+				res.status(500).send('Error: ' + error);
+			});
+	}
+);
+
 // Return data about a genre (description) by name/title
 app.get(
 	'/genres/:name',
