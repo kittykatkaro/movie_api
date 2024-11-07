@@ -217,7 +217,6 @@ app.post(
 // Update User
 app.put(
 	'/users/:username',
-	passport.authenticate('jwt', { session: false }),
 	// Validation logic here
 	[
 		check('username', 'Username is required').isLength({ min: 5 }),
