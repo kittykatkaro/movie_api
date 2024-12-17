@@ -60,6 +60,35 @@ app.get('/', (req, res) => {
 });
 
 // GET route for "/movies" that returns movies in JSON format
+/**
+ * GET route for "/movies" that returns a list of movies in JSON format.
+ *
+ * @name GetMovies
+ * @route {GET} /movies
+ * @async
+ * @function
+ * @returns {void} Sends a JSON response containing an array of movies.
+ *
+ * @example
+ * // Example Response
+ * HTTP/1.1 200 OK
+ * [
+ *   {
+ *     "title": "The Matrix",
+ *     "director": "Wachowski Brothers",
+ *     "year": 1999,
+ *     "genre": "Science Fiction"
+ *   },
+ *   {
+ *     "title": "Inception",
+ *     "director": "Christopher Nolan",
+ *     "year": 2010,
+ *     "genre": "Science Fiction"
+ *   }
+ * ]
+ *
+ * @throws {500} Returns a 500 status code if there is a server error.
+ */
 app.get('/movies', async (req, res) => {
 	await Movies.find()
 		.then((movies) => {
@@ -72,6 +101,34 @@ app.get('/movies', async (req, res) => {
 });
 
 // GET route for "/users" that returns users in JSON format, FOR TESTING PURPOSES
+/**
+ * GET route for "/users" that returns a list of users in JSON format.
+ * This endpoint is for testing purposes only.
+ *
+ * @name GetUsers
+ * @route {GET} /users
+ * @async
+ * @function
+ * @returns {void} Sends a JSON response containing an array of users.
+ *
+ * @example
+ * // Example Response
+ * HTTP/1.1 200 OK
+ * [
+ *   {
+ *     "username": "john_doe",
+ *     "email": "john@example.com",
+ *     "createdAt": "2024-06-10T12:34:56Z"
+ *   },
+ *   {
+ *     "username": "jane_doe",
+ *     "email": "jane@example.com",
+ *     "createdAt": "2024-06-11T09:15:30Z"
+ *   }
+ * ]
+ *
+ * @throws {500} Returns a 500 status code if there is a server error.
+ */
 app.get('/users', async (req, res) => {
 	await Users.find()
 		.then((users) => {
@@ -84,6 +141,37 @@ app.get('/users', async (req, res) => {
 });
 
 // GET movies by title
+/**
+ * GET route for "/movies/:title" that returns a single movie by its title.
+ * This endpoint requires JWT authentication.
+ *
+ * @name GetMovieByTitle
+ * @route {GET} /movies/:title
+ * @authentication Requires JWT authentication.
+ * @async
+ * @function
+ *
+ * @param {string} req.params.title - The title of the movie to retrieve.
+ *
+ * @returns {void} Sends a JSON response containing the movie object.
+ *
+ * @example
+ * // Example Request
+ * GET /movies/Inception
+ * Authorization: Bearer <JWT_TOKEN>
+ *
+ * // Example Response
+ * HTTP/1.1 200 OK
+ * {
+ *   "title": "Inception",
+ *   "director": "Christopher Nolan",
+ *   "year": 2010,
+ *   "genre": "Science Fiction"
+ * }
+ *
+ * @throws {500} Returns a 500 status code if there is a server error.
+ * @throws {401} Returns a 401 status code if authentication fails.
+ */
 app.get(
 	'/movies/:title',
 	passport.authenticate('jwt', { session: false }),
@@ -100,6 +188,39 @@ app.get(
 );
 
 // Return data about a genre (description) by name/title
+/**
+ * GET route for "/genres/:name" that returns genre data (e.g., description) by genre name/title.
+ * This endpoint requires JWT authentication.
+ *
+ * @name GetGenreByName
+ * @route {GET} /genres/:name
+ * @authentication Requires JWT authentication.
+ * @function
+ *
+ * @param {string} req.params.name - The name of the genre to retrieve (case-insensitive).
+ *
+ * @returns {void} Sends a JSON response containing the genre object or an error message.
+ *
+ * @example
+ * // Example Request
+ * GET /genres/Science%20Fiction
+ * Authorization: Bearer <JWT_TOKEN>
+ *
+ * // Example Successful Response
+ * HTTP/1.1 200 OK
+ * {
+ *   "name": "Science Fiction",
+ *   "description": "A genre that uses speculative, futuristic concepts."
+ * }
+ *
+ * // Example 404 Response
+ * HTTP/1.1 404 Not Found
+ * "Science Fiction was not found."
+ *
+ * @throws {404} Returns a 404 status code if the genre is not found.
+ * @throws {500} Returns a 500 status code if there is a server error.
+ * @throws {401} Returns a 401 status code if authentication fails.
+ */
 app.get(
 	'/genres/:name',
 	passport.authenticate('jwt', { session: false }),
@@ -123,6 +244,42 @@ app.get(
 );
 
 // Return director description
+/**
+ * GET route for "/directors/:name" that returns a director's description by their last name.
+ * This endpoint requires JWT authentication.
+ *
+ * @name GetDirectorByName
+ * @route {GET} /directors/:name
+ * @authentication Requires JWT authentication.
+ * @function
+ *
+ * @param {string} req.params.name - The last name of the director to retrieve (case-insensitive).
+ *
+ * @returns {void} Sends a JSON response containing the director's information or an error message.
+ *
+ * @example
+ * // Example Request
+ * GET /directors/Nolan
+ * Authorization: Bearer <JWT_TOKEN>
+ *
+ * // Example Successful Response
+ * HTTP/1.1 200 OK
+ * {
+ *   "first_name": "Christopher",
+ *   "last_name": "Nolan",
+ *   "bio": "British-American film director, producer, and screenwriter...",
+ *   "birth": "1970-07-30",
+ *   "death": null
+ * }
+ *
+ * // Example 404 Response
+ * HTTP/1.1 404 Not Found
+ * "Nolan was not found."
+ *
+ * @throws {404} Returns a 404 status code if the director is not found.
+ * @throws {500} Returns a 500 status code if there is a server error.
+ * @throws {401} Returns a 401 status code if authentication fails.
+ */
 app.get(
 	'/directors/:name',
 	passport.authenticate('jwt', { session: false }),
@@ -146,6 +303,59 @@ app.get(
 );
 
 // Create new User
+/**
+ * POST route for "/users" that creates a new user.
+ * Includes input validation for username, password, and email.
+ *
+ * @name CreateUser
+ * @route {POST} /users
+ * @function
+ *
+ * @param {string} req.body.username - The desired username (min 5 characters, alphanumeric).
+ * @param {string} req.body.password - The user's password (required).
+ * @param {string} req.body.email - The user's email address (must be valid).
+ * @param {string} [req.body.birthday] - The user's birthday (optional).
+ *
+ * @returns {void} Sends a JSON response containing the newly created user object or an error message.
+ *
+ * @example
+ * // Example Request
+ * POST /users
+ * Content-Type: application/json
+ *
+ * {
+ *   "username": "johnDoe",
+ *   "password": "12345",
+ *   "email": "johndoe@example.com",
+ *   "birthday": "1990-01-01"
+ * }
+ *
+ * // Example Successful Response
+ * HTTP/1.1 201 Created
+ * {
+ *   "username": "johnDoe",
+ *   "email": "johndoe@example.com",
+ *   "birthday": "1990-01-01",
+ *   "_id": "60f6a2d5c8b4b123456789ab"
+ * }
+ *
+ * // Example 400 Response (Username already exists)
+ * HTTP/1.1 400 Bad Request
+ * "johnDoe already exists"
+ *
+ * // Example 422 Response (Validation errors)
+ * HTTP/1.1 422 Unprocessable Entity
+ * {
+ *   "errors": [
+ *     { "msg": "Username is required", "param": "username" },
+ *     { "msg": "Email does not appear to be valid", "param": "email" }
+ *   ]
+ * }
+ *
+ * @throws {400} Returns a 400 status code if the username already exists.
+ * @throws {422} Returns a 422 status code if input validation fails.
+ * @throws {500} Returns a 500 status code if there is a server error.
+ */
 app.post(
 	'/users', // Validation logic here
 	[
@@ -195,6 +405,57 @@ app.post(
 );
 
 // Update User
+/**
+ * PUT route for "/users/:username" that updates a user's information.
+ * This endpoint requires JWT authentication.
+ *
+ * @name UpdateUser
+ * @route {PUT} /users/:username
+ * @authentication Requires JWT authentication.
+ * @function
+ *
+ * @param {string} req.params.username - The username of the user to be updated.
+ * @param {string} req.body.username - The updated username (min 5 characters, alphanumeric).
+ * @param {string} req.body.password - The updated password (required).
+ * @param {string} req.body.email - The updated email address (must be valid).
+ * @param {string} [req.body.birthday] - The updated birthday (optional).
+ *
+ * @returns {void} Sends a JSON response containing the updated user object or an error message.
+ *
+ * @example
+ * // Example Request
+ * PUT /users/johnDoe
+ * Authorization: Bearer <JWT_TOKEN>
+ * Content-Type: application/json
+ *
+ * {
+ *   "username": "johnDoeUpdated",
+ *   "password": "newPassword123",
+ *   "email": "johndoeupdated@example.com",
+ *   "birthday": "1990-01-01"
+ * }
+ *
+ * // Example Successful Response
+ * HTTP/1.1 200 OK
+ * {
+ *   "username": "johnDoeUpdated",
+ *   "email": "johndoeupdated@example.com",
+ *   "birthday": "1990-01-01",
+ *   "_id": "60f6a2d5c8b4b123456789ab"
+ * }
+ *
+ * // Example 400 Response (Permission Denied)
+ * HTTP/1.1 400 Bad Request
+ * "Permission denied"
+ *
+ * // Example 500 Response (Server Error)
+ * HTTP/1.1 500 Internal Server Error
+ * "Error: [Error details here]"
+ *
+ * @throws {400} Returns a 400 status code if the usernames do not match.
+ * @throws {500} Returns a 500 status code if there is a server error.
+ * @throws {401} Returns a 401 status code if authentication fails.
+ */
 app.put(
 	'/users/:username',
 	// Validation logic here
@@ -235,6 +496,47 @@ app.put(
 );
 
 // Add movie to user's favorite list
+/**
+ * PUT route for "/users/:username/movies/:MovieID" that adds a movie to a user's favorite list.
+ * This endpoint requires JWT authentication.
+ *
+ * @name AddFavoriteMovie
+ * @route {PUT} /users/:username/movies/:MovieID
+ * @authentication Requires JWT authentication.
+ * @function
+ *
+ * @param {string} req.params.username - The username of the user to update.
+ * @param {string} req.params.MovieID - The ID of the movie to add to the favorites list.
+ *
+ * @returns {void} Sends a JSON response containing the updated user document.
+ *
+ * @example
+ * // Example Request
+ * PUT /users/johnDoe/movies/60f6a2d5c8b4b123456789ab
+ * Authorization: Bearer <JWT_TOKEN>
+ *
+ * // Example Successful Response
+ * HTTP/1.1 200 OK
+ * {
+ *   "username": "johnDoe",
+ *   "email": "johndoe@example.com",
+ *   "favorites": ["60f6a2d5c8b4b123456789ab", "60f6a2d5c8b4b123456789ac"],
+ *   "birthday": "1990-01-01",
+ *   "_id": "60f6a2d5c8b4b123456789aa"
+ * }
+ *
+ * // Example 400 Response (Movie not found)
+ * HTTP/1.1 400 Bad Request
+ * "60f6a2d5c8b4b123456789ab was not found"
+ *
+ * // Example 500 Response (Server Error)
+ * HTTP/1.1 500 Internal Server Error
+ * "Error: [Error details here]"
+ *
+ * @throws {400} Returns a 400 status code if the movie does not exist in the database.
+ * @throws {500} Returns a 500 status code if there is a server error.
+ * @throws {401} Returns a 401 status code if authentication fails.
+ */
 app.put(
 	'/users/:username/movies/:MovieID',
 	passport.authenticate('jwt', { session: false }),
@@ -262,6 +564,42 @@ app.put(
 );
 
 // Remove movie from user's favorite list
+/**
+ * DELETE route for "/users/:username/movies/:MovieID" that removes a movie from a user's favorite list.
+ * This endpoint requires JWT authentication.
+ *
+ * @name RemoveFavoriteMovie
+ * @route {DELETE} /users/:username/movies/:MovieID
+ * @authentication Requires JWT authentication.
+ * @function
+ *
+ * @param {string} req.params.username - The username of the user to update.
+ * @param {string} req.params.MovieID - The ID of the movie to remove from the favorites list.
+ *
+ * @returns {void} Sends a JSON response containing the updated user document.
+ *
+ * @example
+ * // Example Request
+ * DELETE /users/johnDoe/movies/60f6a2d5c8b4b123456789ab
+ * Authorization: Bearer <JWT_TOKEN>
+ *
+ * // Example Successful Response
+ * HTTP/1.1 200 OK
+ * {
+ *   "username": "johnDoe",
+ *   "email": "johndoe@example.com",
+ *   "favorites": ["60f6a2d5c8b4b123456789ac"],
+ *   "birthday": "1990-01-01",
+ *   "_id": "60f6a2d5c8b4b123456789aa"
+ * }
+ *
+ * // Example 500 Response (Server Error)
+ * HTTP/1.1 500 Internal Server Error
+ * "Error: [Error details here]"
+ *
+ * @throws {500} Returns a 500 status code if there is a server error.
+ * @throws {401} Returns a 401 status code if authentication fails.
+ */
 app.delete(
 	'/users/:username/movies/:MovieID',
 	passport.authenticate('jwt', { session: false }),
@@ -284,6 +622,40 @@ app.delete(
 );
 
 // Delete a user by username
+/**
+ * DELETE route for "/users/:username" that deletes a user by their username.
+ * This endpoint requires JWT authentication.
+ *
+ * @name DeleteUser
+ * @route {DELETE} /users/:username
+ * @authentication Requires JWT authentication.
+ * @function
+ *
+ * @param {string} req.params.username - The username of the user to be deleted.
+ *
+ * @returns {void} Sends a success message if the user is deleted or an error message if not.
+ *
+ * @example
+ * // Example Request
+ * DELETE /users/johnDoe
+ * Authorization: Bearer <JWT_TOKEN>
+ *
+ * // Example Successful Response
+ * HTTP/1.1 200 OK
+ * "johnDoe was deleted."
+ *
+ * // Example 400 Response (User Not Found)
+ * HTTP/1.1 400 Bad Request
+ * "johnDoe was not found"
+ *
+ * // Example 500 Response (Server Error)
+ * HTTP/1.1 500 Internal Server Error
+ * "Error: [Error details here]"
+ *
+ * @throws {400} Returns a 400 status code if the user does not exist.
+ * @throws {500} Returns a 500 status code if there is a server error.
+ * @throws {401} Returns a 401 status code if authentication fails.
+ */
 app.delete(
 	'/users/:username',
 	passport.authenticate('jwt', { session: false }),
