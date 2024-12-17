@@ -26,20 +26,25 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const cors = require('cors');
-let allowedOrigins = ['http://localhost:8080', 'http://testsite.com'];
+let allowedOrigins = [
+	'http://localhost:1234',
+	'http://testsite.com',
+	'https://karoflix.netlify.app/',
+];
 app.use(
-	cors({
-		origin: (origin, callback) => {
-			if (!origin) return callback(null, true);
-			if (allowedOrigins.indexOf(origin) === -1) {
-				let message =
-					'The CORS policy for this application doesn’t allow access from origin ' +
-					origin;
-				return callback(new Error(message), false);
-			}
-			return callback(null, true);
-		},
-	})
+	cors()
+	// 	{
+	// 	origin: (origin, callback) => {
+	// 		if (!origin) return callback(null, true);
+	// 		if (allowedOrigins.indexOf(origin) === -1) {
+	// 			let message =
+	// 				'The CORS policy for this application doesn’t allow access from origin ' +
+	// 				origin;
+	// 			return callback(new Error(message), false);
+	// 		}
+	// 		return callback(null, true);
+	// 	},
+	// }
 );
 
 let auth = require('./auth')(app);
@@ -60,45 +65,20 @@ app.get('/', (req, res) => {
 });
 
 // GET route for "/movies" that returns movies in JSON format
-/**
- * GET route for "/movies" that returns a list of movies in JSON format.
- *
- * @name GetMovies
- * @route {GET} /movies
- * @async
- * @function
- * @returns {void} Sends a JSON response containing an array of movies.
- *
- * @example
- * // Example Response
- * HTTP/1.1 200 OK
- * [
- *   {
- *     "title": "The Matrix",
- *     "director": "Wachowski Brothers",
- *     "year": 1999,
- *     "genre": "Science Fiction"
- *   },
- *   {
- *     "title": "Inception",
- *     "director": "Christopher Nolan",
- *     "year": 2010,
- *     "genre": "Science Fiction"
- *   }
- * ]
- *
- * @throws {500} Returns a 500 status code if there is a server error.
- */
-app.get('/movies', async (req, res) => {
-	await Movies.find()
-		.then((movies) => {
-			res.status(200).json(movies);
-		})
-		.catch((error) => {
-			console.error(error);
-			res.status(500).send('Error: ' + error);
-		});
-});
+app.get(
+	'/movies',
+	passport.authenticate('jwt', { session: false }),
+	async (req, res) => {
+		await Movies.find()
+			.then((movies) => {
+				res.status(200).json(movies);
+			})
+			.catch((error) => {
+				console.error(error);
+				res.status(500).send('Error: ' + error);
+			});
+	}
+);
 
 // GET route for "/users" that returns users in JSON format, FOR TESTING PURPOSES
 /**
@@ -177,6 +157,22 @@ app.get(
 	passport.authenticate('jwt', { session: false }),
 	async (req, res) => {
 		await Movies.findOne({ title: req.params.title })
+			.then((movie) => {
+				res.json(movie);
+			})
+			.catch((error) => {
+				console.error(error);
+				res.status(500).send('Error: ' + error);
+			});
+	}
+);
+
+// GET movie by ID
+app.get(
+	'/movies/:id',
+	passport.authenticate('jwt', { session: false }),
+	async (req, res) => {
+		await Movies.findById(req.params.id)
 			.then((movie) => {
 				res.json(movie);
 			})
@@ -473,12 +469,13 @@ app.put(
 		if (req.params.username !== req.body.username) {
 			return res.status(400).send('Permission denied');
 		}
+		let hashedPassword = Users.hashPassword(req.body.password);
 		await Users.findOneAndUpdate(
 			{ username: req.params.username },
 			{
 				$set: {
 					username: req.body.username,
-					password: req.body.password,
+					password: hashedPassword,
 					email: req.body.email,
 					birthday: req.body.birthday,
 				},
